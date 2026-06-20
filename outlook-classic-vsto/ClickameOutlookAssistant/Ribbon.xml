@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui" onLoad="Ribbon_Load">
+  <ribbon>
+    <tabs>
+      <!-- Pestanya visible al compositor de correu nou -->
+      <tab idMso="TabNewMailMessage">
+        <group id="grpClickame" label="Clickame Assistant">
+          <button id="btnSettings"
+                  label="Configuració"
+                  size="large"
+                  imageMso="ComAddInsDialog"
+                  onAction="OnSettingsClick"
+                  screentip="Configuració del CCO automàtic i plantilles" />
+          <dynamicMenu id="menuTemplates"
+                       label="Plantilles"
+                       size="large"
+                       imageMso="MailMergeStartEmail"
+                       getContent="GetTemplatesMenuContent"
+                       screentip="Inserir una plantilla al cos del correu" />
+        </group>
+      </tab>
+    </tabs>
+  </ribbon>
+</customUI>

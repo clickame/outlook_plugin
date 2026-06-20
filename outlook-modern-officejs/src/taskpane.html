@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ca">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Clickame Outlook Assistant</title>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+    <link rel="stylesheet" href="taskpane.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Clickame Assistant</h1>
+      <p class="sub">CCO automàtic i plantilles · tot en local</p>
+    </header>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="bcc">CCO</button>
+      <button class="tab" data-tab="templates">Plantilles</button>
+      <button class="tab" data-tab="logs">Logs</button>
+    </nav>
+
+    <!-- Secció CCO -->
+    <section id="tab-bcc" class="tab-panel active">
+      <label for="bccEmail">Adreça CCO (BCC)</label>
+      <input type="email" id="bccEmail" placeholder="cco@empresa.com" />
+
+      <label class="check">
+        <input type="checkbox" id="bccAuto" /> Activar CCO automàtic
+      </label>
+
+      <label for="bccMode">Mode</label>
+      <select id="bccMode">
+        <option value="on_send">En enviar (recomanat) — on_send</option>
+        <option value="on_new_mail">En obrir correu nou — on_new_mail</option>
+      </select>
+
+      <button id="saveBcc" class="primary">Desar configuració</button>
+      <p id="bccStatus" class="status"></p>
+    </section>
+
+    <!-- Secció Plantilles -->
+    <section id="tab-templates" class="tab-panel">
+      <div class="row">
+        <button id="insertSelected" class="primary">Inserir al correu</button>
+        <button id="newTemplate">Nova</button>
+      </div>
+
+      <label for="templateList">Plantilles</label>
+      <select id="templateList" size="6"></select>
+
+      <div class="editor">
+        <label for="tplNom">Nom</label>
+        <input type="text" id="tplNom" />
+
+        <label for="tplAssumpte">Assumpte (opcional)</label>
+        <input type="text" id="tplAssumpte" />
+
+        <label class="check">
+          <input type="checkbox" id="tplHtml" checked /> El cos és HTML
+        </label>
+
+        <label for="tplCos">Cos</label>
+        <textarea id="tplCos" rows="8"></textarea>
+
+        <div class="row">
+          <button id="saveTemplate" class="primary">Desar plantilla</button>
+          <button id="deleteTemplate" class="danger">Eliminar</button>
+        </div>
+        <p id="tplStatus" class="status"></p>
+      </div>
+    </section>
+
+    <!-- Secció Logs -->
+    <section id="tab-logs" class="tab-panel">
+      <div class="row">
+        <button id="refreshLogs">Refrescar</button>
+        <button id="clearLogs" class="danger">Esborrar logs</button>
+      </div>
+      <pre id="logOutput" class="logs"></pre>
+    </section>
+
+    <script type="text/javascript" src="taskpane.js"></script>
+  </body>
+</html>

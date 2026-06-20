@@ -1,0 +1,28 @@
+{
+  "email_bcc": "registre@clickame.es",
+  "activar_bcc_auto": true,
+  "mode_bcc": "on_send",
+  "plantilles": [
+    {
+      "id": "tpl-salutacio",
+      "nom": "Salutació inicial",
+      "assumpte": "Gràcies pel teu interès",
+      "es_html": true,
+      "cos": "<p>Hola,</p><p>Gràcies per contactar amb nosaltres. En breu et donarem resposta.</p><p>Salutacions,<br/>L'equip de Clickame</p>"
+    },
+    {
+      "id": "tpl-seguiment",
+      "nom": "Seguiment comercial",
+      "assumpte": "Seguiment de la teva sol·licitud",
+      "es_html": true,
+      "cos": "<p>Bon dia,</p><p>Volia fer un seguiment de la proposta que et vam enviar. Tens cap dubte o vols que en parlem?</p><p>Quedo a la teva disposició.</p>"
+    },
+    {
+      "id": "tpl-text-pla",
+      "nom": "Nota interna (text pla)",
+      "assumpte": "",
+      "es_html": false,
+      "cos": "Recordatori: revisar i respondre abans de final de dia.\n\nGràcies."
+    }
+  ]
+}
