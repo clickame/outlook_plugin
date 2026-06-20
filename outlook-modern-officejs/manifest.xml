@@ -5,7 +5,7 @@
   - Inclou esdeveniments d'inici (LaunchEvent):
       OnNewMessageCompose  -> BCC en obrir correu nou (mode on_new_mail)
       OnMessageSend        -> BCC garantit abans d'enviar (mode on_send, "Smart Alerts")
-  - Sense backend. Els fitxers estàtics es serveixen des de https://clickame.es/outlook-plugin/
+  - Sense backend. Els fitxers estàtics es serveixen des de https://clickame.github.io/outlook_plugin/
     (només entrega el codi; les dades de l'usuari es desen localment al seu PC).
 
   NOTES:
@@ -25,12 +25,12 @@
   <DefaultLocale>ca-ES</DefaultLocale>
   <DisplayName DefaultValue="Clickame Outlook Assistant" />
   <Description DefaultValue="CCO automàtic i plantilles de correu. Tot en local, sense backend." />
-  <IconUrl DefaultValue="https://clickame.es/outlook-plugin/assets/icon-64.png" />
-  <HighResolutionIconUrl DefaultValue="https://clickame.es/outlook-plugin/assets/icon-128.png" />
+  <IconUrl DefaultValue="https://clickame.github.io/outlook_plugin/assets/icon-64.png" />
+  <HighResolutionIconUrl DefaultValue="https://clickame.github.io/outlook_plugin/assets/icon-128.png" />
   <SupportUrl DefaultValue="https://clickame.es/" />
 
   <AppDomains>
-    <AppDomain>https://clickame.es</AppDomain>
+    <AppDomain>https://clickame.github.io</AppDomain>
   </AppDomains>
 
   <Hosts>
@@ -47,7 +47,7 @@
   <FormSettings>
     <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://clickame.es/outlook-plugin/taskpane.html" />
+        <SourceLocation DefaultValue="https://clickame.github.io/outlook_plugin/taskpane.html" />
         <RequestedHeight>320</RequestedHeight>
       </DesktopSettings>
     </Form>
@@ -140,15 +140,15 @@
 
       <Resources>
         <bt:Images>
-          <bt:Image id="Icon.16x16" DefaultValue="https://clickame.es/outlook-plugin/assets/icon-16.png" />
-          <bt:Image id="Icon.32x32" DefaultValue="https://clickame.es/outlook-plugin/assets/icon-32.png" />
-          <bt:Image id="Icon.80x80" DefaultValue="https://clickame.es/outlook-plugin/assets/icon-80.png" />
+          <bt:Image id="Icon.16x16" DefaultValue="https://clickame.github.io/outlook_plugin/assets/icon-16.png" />
+          <bt:Image id="Icon.32x32" DefaultValue="https://clickame.github.io/outlook_plugin/assets/icon-32.png" />
+          <bt:Image id="Icon.80x80" DefaultValue="https://clickame.github.io/outlook_plugin/assets/icon-80.png" />
         </bt:Images>
         <bt:Urls>
-          <bt:Url id="Taskpane.Url" DefaultValue="https://clickame.es/outlook-plugin/taskpane.html" />
-          <bt:Url id="Commands.Url" DefaultValue="https://clickame.es/outlook-plugin/commands.html" />
-          <bt:Url id="WebViewRuntime.Url" DefaultValue="https://clickame.es/outlook-plugin/commands.html" />
-          <bt:Url id="JSRuntime.Url" DefaultValue="https://clickame.es/outlook-plugin/commands.js" />
+          <bt:Url id="Taskpane.Url" DefaultValue="https://clickame.github.io/outlook_plugin/taskpane.html" />
+          <bt:Url id="Commands.Url" DefaultValue="https://clickame.github.io/outlook_plugin/commands.html" />
+          <bt:Url id="WebViewRuntime.Url" DefaultValue="https://clickame.github.io/outlook_plugin/commands.html" />
+          <bt:Url id="JSRuntime.Url" DefaultValue="https://clickame.github.io/outlook_plugin/commands.js" />
         </bt:Urls>
         <bt:ShortStrings>
           <bt:String id="GroupLabel" DefaultValue="Clickame Assistant" />
