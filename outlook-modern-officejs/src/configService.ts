@@ -1,34 +1,70 @@
 // Persistència de configuració local.
-// Estratègia: OfficeRuntime.storage si està disponible (compartit entre task pane
-// i handlers d'esdeveniments), amb fallback a localStorage.
+// Estratègia: Office.context.roamingSettings (es desa a la bústia de l'usuari i és
+// COMPARTIT entre el task pane i els runtimes d'esdeveniments —i entre dispositius—,
+// funciona al nou Outlook, OWA, Outlook clàssic i Mac).
+//
+// IMPORTANT: NO fem servir OfficeRuntime.storage perquè NO està disponible al nou
+// Outlook per Windows ni a OWA, i el fallback a localStorage NO es comparteix entre
+// el task pane i el runtime dels esdeveniments (cada runtime té el seu localStorage
+// aïllat). Això feia que el handler d'enviament llegís sempre la config per defecte
+// i mai afegís el CCO.
 
 import { Config, defaultConfig } from "./models";
 import { Logger } from "./logger";
 
 const STORAGE_KEY = "clickame_config";
 
-/** Comprova si OfficeRuntime.storage està disponible en aquest client. */
-function hasOfficeRuntimeStorage(): boolean {
-  return (
-    typeof OfficeRuntime !== "undefined" &&
-    !!OfficeRuntime &&
-    !!OfficeRuntime.storage &&
-    typeof OfficeRuntime.storage.getItem === "function"
-  );
+/** Comprova si roamingSettings està disponible (qualsevol client Outlook modern). */
+function hasRoamingSettings(): boolean {
+  try {
+    return (
+      typeof Office !== "undefined" &&
+      !!Office.context &&
+      !!Office.context.roamingSettings &&
+      typeof Office.context.roamingSettings.get === "function"
+    );
+  } catch {
+    return false;
+  }
 }
 
 async function rawGet(key: string): Promise<string | null> {
-  if (hasOfficeRuntimeStorage()) {
-    return await OfficeRuntime.storage.getItem(key);
+  if (hasRoamingSettings()) {
+    try {
+      const v = Office.context.roamingSettings.get(key);
+      if (v === undefined || v === null) return null;
+      return typeof v === "string" ? v : JSON.stringify(v);
+    } catch (e) {
+      Logger.error("Error llegint roamingSettings; es prova localStorage.", e);
+    }
   }
-  return window.localStorage.getItem(key);
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
 }
 
 async function rawSet(key: string, value: string): Promise<void> {
-  if (hasOfficeRuntimeStorage()) {
-    await OfficeRuntime.storage.setItem(key, value);
+  if (hasRoamingSettings()) {
+    await new Promise<void>((resolve, reject) => {
+      try {
+        Office.context.roamingSettings.set(key, value);
+        Office.context.roamingSettings.saveAsync((res) => {
+          if (res.status === Office.AsyncResultStatus.Succeeded) {
+            resolve();
+          } else {
+            Logger.error("Error desant roamingSettings.", res.error);
+            reject(res.error);
+          }
+        });
+      } catch (e) {
+        reject(e);
+      }
+    });
     return;
   }
+  // Fallback (clients sense roamingSettings): no es comparteix entre runtimes.
   window.localStorage.setItem(key, value);
 }
 
