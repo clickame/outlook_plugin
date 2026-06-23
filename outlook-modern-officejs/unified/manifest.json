@@ -1,0 +1,238 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.17/MicrosoftTeams.schema.json#",
+    "manifestVersion": "1.17",
+    "version": "1.0.2",
+    "id": "3c02a33e-a08b-457e-b3fd-844fb57410e5",
+    "localizationInfo": {
+        "defaultLanguageTag": "ca-es"
+    },
+    "developer": {
+        "name": "Clickame",
+        "websiteUrl": "https://clickame.es/",
+        "privacyUrl": "https://clickame.es/",
+        "termsOfUseUrl": "https://clickame.es/"
+    },
+    "name": {
+        "short": "Clickame Outlook Assistant",
+        "full": "Clickame Outlook Assistant"
+    },
+    "description": {
+        "short": "CCO automàtic i plantilles de correu. Tot en local, sense backend.",
+        "full": "CCO automàtic i plantilles de correu. Tot en local, sense backend."
+    },
+    "icons": {
+        "outline": "assets/outline.png",
+        "color": "assets/color.png"
+    },
+    "accentColor": "#230201",
+    "validDomains": [
+        "clickame.github.io"
+    ],
+    "showLoadingIndicator": false,
+    "isFullScreen": false,
+    "defaultBlockUntilAdminAction": false,
+    "authorization": {
+        "permissions": {
+            "resourceSpecific": [
+                {
+                    "name": "MailboxItem.ReadWrite.User",
+                    "type": "Delegated"
+                }
+            ]
+        }
+    },
+    "extensions": [
+        {
+            "requirements": {
+                "capabilities": [
+                    {
+                        "name": "Mailbox",
+                        "minVersion": "1.5"
+                    }
+                ],
+                "scopes": [
+                    "mail"
+                ]
+            },
+            "runtimes": [
+                {
+                    "requirements": {
+                        "capabilities": [
+                            {
+                                "name": "Mailbox",
+                                "minVersion": "1.5"
+                            }
+                        ],
+                        "formFactors": [
+                            "desktop"
+                        ]
+                    },
+                    "id": "runtime_1",
+                    "type": "general",
+                    "code": {
+                        "page": "https://clickame.github.io/outlook_plugin/commands.html",
+                        "script": "https://clickame.github.io/outlook_plugin/commands.js"
+                    },
+                    "lifetime": "short"
+                },
+                {
+                    "requirements": {
+                        "capabilities": [
+                            {
+                                "name": "Mailbox",
+                                "minVersion": "1.5"
+                            }
+                        ],
+                        "formFactors": [
+                            "desktop"
+                        ]
+                    },
+                    "id": "runtime_2",
+                    "type": "general",
+                    "code": {
+                        "page": "https://clickame.github.io/outlook_plugin/commands.html"
+                    },
+                    "lifetime": "short",
+                    "actions": [
+                        {
+                            "id": "onNewMessageCompose",
+                            "type": "executeFunction",
+                            "displayName": "onNewMessageCompose",
+                            "multiselect": false,
+                            "supportsNoItemContext": false
+                        },
+                        {
+                            "id": "onMessageSendHandler",
+                            "type": "executeFunction",
+                            "displayName": "onMessageSendHandler",
+                            "multiselect": false,
+                            "supportsNoItemContext": false
+                        }
+                    ]
+                },
+                {
+                    "requirements": {
+                        "capabilities": [
+                            {
+                                "name": "Mailbox",
+                                "minVersion": "1.5"
+                            }
+                        ],
+                        "formFactors": [
+                            "desktop"
+                        ]
+                    },
+                    "id": "runtime_3",
+                    "type": "general",
+                    "code": {
+                        "page": "https://clickame.github.io/outlook_plugin/taskpane.html"
+                    },
+                    "lifetime": "short",
+                    "actions": [
+                        {
+                            "id": "action_1",
+                            "type": "openPage",
+                            "displayName": "action_1",
+                            "pinnable": false,
+                            "view": "view_1",
+                            "multiselect": false,
+                            "supportsNoItemContext": false
+                        }
+                    ]
+                }
+            ],
+            "ribbons": [
+                {
+                    "requirements": {
+                        "capabilities": [
+                            {
+                                "name": "Mailbox",
+                                "minVersion": "1.5"
+                            }
+                        ],
+                        "scopes": [
+                            "mail"
+                        ],
+                        "formFactors": [
+                            "desktop"
+                        ]
+                    },
+                    "contexts": [
+                        "mailCompose"
+                    ],
+                    "tabs": [
+                        {
+                            "builtInTabId": "TabDefault",
+                            "groups": [
+                                {
+                                    "id": "clickameGroup",
+                                    "label": "Clickame Assistant",
+                                    "controls": [
+                                        {
+                                            "id": "openTaskpaneButton",
+                                            "type": "button",
+                                            "label": "Plantilles",
+                                            "icons": [
+                                                {
+                                                    "size": 16,
+                                                    "url": "https://clickame.github.io/outlook_plugin/assets/icon-16.png"
+                                                },
+                                                {
+                                                    "size": 32,
+                                                    "url": "https://clickame.github.io/outlook_plugin/assets/icon-32.png"
+                                                },
+                                                {
+                                                    "size": 80,
+                                                    "url": "https://clickame.github.io/outlook_plugin/assets/icon-80.png"
+                                                }
+                                            ],
+                                            "supertip": {
+                                                "title": "Plantilles",
+                                                "description": "Obre la configuració del CCO automàtic i les plantilles."
+                                            },
+                                            "actionId": "action_1",
+                                            "overriddenByRibbonApi": false,
+                                            "enabled": true
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "autoRunEvents": [
+                {
+                    "requirements": {
+                        "capabilities": [
+                            {
+                                "name": "Mailbox",
+                                "minVersion": "1.5"
+                            }
+                        ],
+                        "scopes": [
+                            "mail"
+                        ],
+                        "formFactors": [
+                            "desktop"
+                        ]
+                    },
+                    "events": [
+                        {
+                            "type": "newMessageComposeCreated",
+                            "actionId": "onNewMessageCompose"
+                        },
+                        {
+                            "type": "messageSending",
+                            "actionId": "onMessageSendHandler",
+                            "options": {
+                                "sendMode": "promptUser"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "audienceClaimUrl": "https://clickame.github.io/outlook_plugin/taskpane.html"
+        }
+    ]
+}
