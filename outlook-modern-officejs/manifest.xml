@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Manifest XML per a l'add-in d'Outlook (Mailbox add-in).
+  - Task pane (Configuració CCO + Plantilles + Logs).
+  - Esdeveniments d'inici (LaunchEvent), que requereixen VersionOverridesV1_1:
+      OnNewMessageCompose  -> CCO en obrir correu nou (mode on_new_mail)
+      OnMessageSend        -> CCO garantit abans d'enviar (mode on_send, Smart Alerts)
+  - Fitxers servits des de GitHub Pages: https://clickame.github.io/outlook_plugin/
+  - Els esdeveniments (Smart Alerts) requereixen Mailbox 1.12 i clients compatibles
+    (nou Outlook / Outlook web / Microsoft 365).
+-->
 <OfficeApp
   xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -7,88 +17,128 @@
   xsi:type="MailApp">
 
   <Id>3c02a33e-a08b-457e-b3fd-844fb57410e5</Id>
-  <Version>1.0.0.0</Version>
+  <Version>1.0.1.0</Version>
   <ProviderName>Clickame</ProviderName>
   <DefaultLocale>ca-ES</DefaultLocale>
-  <DisplayName DefaultValue="Clickame Outlook Assistant"/>
-  <Description DefaultValue="CCO automàtic i plantilles de correu."/>
-  <IconUrl DefaultValue="https://clickame.github.io/outlook_plugin/assets/icon-64.png"/>
-  <HighResolutionIconUrl DefaultValue="https://clickame.github.io/outlook_plugin/assets/icon-128.png"/>
-  <SupportUrl DefaultValue="https://clickame.es/"/>
+  <DisplayName DefaultValue="Clickame Outlook Assistant" />
+  <Description DefaultValue="CCO automàtic i plantilles de correu. Tot en local, sense backend." />
+  <IconUrl DefaultValue="https://clickame.github.io/outlook_plugin/assets/icon-64.png" />
+  <HighResolutionIconUrl DefaultValue="https://clickame.github.io/outlook_plugin/assets/icon-128.png" />
+  <SupportUrl DefaultValue="https://clickame.es/" />
+
+  <AppDomains>
+    <AppDomain>https://clickame.github.io</AppDomain>
+  </AppDomains>
 
   <Hosts>
-    <Host Name="Mailbox"/>
+    <Host Name="Mailbox" />
   </Hosts>
 
   <Requirements>
     <Sets>
-      <Set Name="Mailbox" MinVersion="1.5"/>
+      <Set Name="Mailbox" MinVersion="1.5" />
     </Sets>
   </Requirements>
 
+  <!-- Punt d'entrada per a clients antics que no suporten VersionOverrides. -->
   <FormSettings>
-    <Form xsi:type="ItemEdit">
+    <Form xsi:type="ItemRead">
       <DesktopSettings>
-        <SourceLocation DefaultValue="https://clickame.github.io/outlook_plugin/taskpane.html"/>
+        <SourceLocation DefaultValue="https://clickame.github.io/outlook_plugin/taskpane.html" />
+        <RequestedHeight>320</RequestedHeight>
       </DesktopSettings>
     </Form>
   </FormSettings>
 
   <Permissions>ReadWriteItem</Permissions>
 
-  <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit"/>
+  <Rule xsi:type="RuleCollection" Mode="Or">
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Read" />
+    <Rule xsi:type="ItemIs" ItemType="Message" FormType="Edit" />
+  </Rule>
 
   <DisableEntityHighlighting>false</DisableEntityHighlighting>
 
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides" xsi:type="VersionOverridesV1_0">
-    <Hosts>
-      <Host xsi:type="MailHost">
-        <DesktopFormFactor>
-          <FunctionFile resid="Commands.Url"/>
+    <VersionOverrides xmlns="http://schemas.microsoft.com/office/mailappversionoverrides/1.1" xsi:type="VersionOverridesV1_1">
 
-          <ExtensionPoint xsi:type="MessageComposeCommandSurface">
-            <OfficeTab id="TabDefault">
-              <Group id="clickameGroup">
-                <Label resid="GroupLabel"/>
-                <Control xsi:type="Button" id="openTaskpaneButton">
-                  <Label resid="TaskpaneButton.Label"/>
-                  <Supertip>
-                    <Title resid="TaskpaneButton.Label"/>
-                    <Description resid="TaskpaneButton.Tooltip"/>
-                  </Supertip>
-                  <Icon>
-                    <bt:Image size="16" resid="Icon.16x16"/>
-                    <bt:Image size="32" resid="Icon.32x32"/>
-                    <bt:Image size="80" resid="Icon.80x80"/>
-                  </Icon>
-                  <Action xsi:type="ShowTaskpane">
-                    <SourceLocation resid="Taskpane.Url"/>
-                  </Action>
-                </Control>
-              </Group>
-            </OfficeTab>
-          </ExtensionPoint>
-        </DesktopFormFactor>
-      </Host>
-    </Hosts>
+      <Requirements>
+        <bt:Sets DefaultMinVersion="1.12">
+          <bt:Set Name="Mailbox" />
+        </bt:Sets>
+      </Requirements>
 
-    <Resources>
-      <bt:Images>
-        <bt:Image id="Icon.16x16" DefaultValue="https://clickame.github.io/outlook_plugin/assets/icon-16.png"/>
-        <bt:Image id="Icon.32x32" DefaultValue="https://clickame.github.io/outlook_plugin/assets/icon-32.png"/>
-        <bt:Image id="Icon.80x80" DefaultValue="https://clickame.github.io/outlook_plugin/assets/icon-80.png"/>
-      </bt:Images>
-      <bt:Urls>
-        <bt:Url id="Taskpane.Url" DefaultValue="https://clickame.github.io/outlook_plugin/taskpane.html"/>
-        <bt:Url id="Commands.Url" DefaultValue="https://clickame.github.io/outlook_plugin/commands.html"/>
-      </bt:Urls>
-      <bt:ShortStrings>
-        <bt:String id="GroupLabel" DefaultValue="Clickame Assistant"/>
-        <bt:String id="TaskpaneButton.Label" DefaultValue="Plantilles"/>
-      </bt:ShortStrings>
-      <bt:LongStrings>
-        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Obre el panell de plantilles i configuració."/>
-      </bt:LongStrings>
-    </Resources>
+      <Hosts>
+        <Host xsi:type="MailHost">
+
+          <!-- Runtime per a comandes i handlers d'esdeveniments (sense interfície). -->
+          <Runtimes>
+            <Runtime resid="WebViewRuntime.Url">
+              <Override type="javascript" resid="JSRuntime.Url" />
+            </Runtime>
+          </Runtimes>
+
+          <DesktopFormFactor>
+            <!-- Fitxer de funcions per a accions i handlers d'esdeveniments. -->
+            <FunctionFile resid="Commands.Url" />
+
+            <!-- Esdeveniments d'inici: compose nou i abans d'enviar. -->
+            <ExtensionPoint xsi:type="LaunchEvent">
+              <LaunchEvents>
+                <LaunchEvent Type="OnNewMessageCompose" FunctionName="onNewMessageCompose" />
+                <LaunchEvent Type="OnMessageSend" FunctionName="onMessageSendHandler" SendMode="PromptUser" />
+              </LaunchEvents>
+              <SourceLocation resid="Commands.Url" />
+            </ExtensionPoint>
+
+            <!-- Botons al compositor de correu. -->
+            <ExtensionPoint xsi:type="MessageComposeCommandSurface">
+              <OfficeTab id="TabDefault">
+                <Group id="clickameGroup">
+                  <Label resid="GroupLabel" />
+
+                  <Control xsi:type="Button" id="openTaskpaneButton">
+                    <Label resid="TaskpaneButton.Label" />
+                    <Supertip>
+                      <Title resid="TaskpaneButton.Label" />
+                      <Description resid="TaskpaneButton.Tooltip" />
+                    </Supertip>
+                    <Icon>
+                      <bt:Image size="16" resid="Icon.16x16" />
+                      <bt:Image size="32" resid="Icon.32x32" />
+                      <bt:Image size="80" resid="Icon.80x80" />
+                    </Icon>
+                    <Action xsi:type="ShowTaskpane">
+                      <SourceLocation resid="Taskpane.Url" />
+                    </Action>
+                  </Control>
+                </Group>
+              </OfficeTab>
+            </ExtensionPoint>
+          </DesktopFormFactor>
+        </Host>
+      </Hosts>
+
+      <Resources>
+        <bt:Images>
+          <bt:Image id="Icon.16x16" DefaultValue="https://clickame.github.io/outlook_plugin/assets/icon-16.png" />
+          <bt:Image id="Icon.32x32" DefaultValue="https://clickame.github.io/outlook_plugin/assets/icon-32.png" />
+          <bt:Image id="Icon.80x80" DefaultValue="https://clickame.github.io/outlook_plugin/assets/icon-80.png" />
+        </bt:Images>
+        <bt:Urls>
+          <bt:Url id="Taskpane.Url" DefaultValue="https://clickame.github.io/outlook_plugin/taskpane.html" />
+          <bt:Url id="Commands.Url" DefaultValue="https://clickame.github.io/outlook_plugin/commands.html" />
+          <bt:Url id="WebViewRuntime.Url" DefaultValue="https://clickame.github.io/outlook_plugin/commands.html" />
+          <bt:Url id="JSRuntime.Url" DefaultValue="https://clickame.github.io/outlook_plugin/commands.js" />
+        </bt:Urls>
+        <bt:ShortStrings>
+          <bt:String id="GroupLabel" DefaultValue="Clickame Assistant" />
+          <bt:String id="TaskpaneButton.Label" DefaultValue="Plantilles" />
+        </bt:ShortStrings>
+        <bt:LongStrings>
+          <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Obre la configuració del CCO automàtic i les plantilles." />
+        </bt:LongStrings>
+      </Resources>
+    </VersionOverrides>
   </VersionOverrides>
 </OfficeApp>
