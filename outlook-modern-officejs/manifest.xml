@@ -17,7 +17,7 @@
   xsi:type="MailApp">
 
   <Id>3c02a33e-a08b-457e-b3fd-844fb57410e5</Id>
-  <Version>1.0.1.0</Version>
+  <Version>1.0.2.0</Version>
   <ProviderName>Clickame</ProviderName>
   <DefaultLocale>ca-ES</DefaultLocale>
   <DisplayName DefaultValue="Clickame Outlook Assistant" />
@@ -82,15 +82,6 @@
             <!-- Fitxer de funcions per a accions i handlers d'esdeveniments. -->
             <FunctionFile resid="Commands.Url" />
 
-            <!-- Esdeveniments d'inici: compose nou i abans d'enviar. -->
-            <ExtensionPoint xsi:type="LaunchEvent">
-              <LaunchEvents>
-                <LaunchEvent Type="OnNewMessageCompose" FunctionName="onNewMessageCompose" />
-                <LaunchEvent Type="OnMessageSend" FunctionName="onMessageSendHandler" SendMode="PromptUser" />
-              </LaunchEvents>
-              <SourceLocation resid="Commands.Url" />
-            </ExtensionPoint>
-
             <!-- Botons al compositor de correu. -->
             <ExtensionPoint xsi:type="MessageComposeCommandSurface">
               <OfficeTab id="TabDefault">
@@ -114,6 +105,16 @@
                   </Control>
                 </Group>
               </OfficeTab>
+            </ExtensionPoint>
+
+            <!-- Esdeveniments d'inici: compose nou i abans d'enviar.
+                 Va DESPRÉS dels CommandSurface, com al sample oficial de Microsoft. -->
+            <ExtensionPoint xsi:type="LaunchEvent">
+              <LaunchEvents>
+                <LaunchEvent Type="OnNewMessageCompose" FunctionName="onNewMessageCompose" />
+                <LaunchEvent Type="OnMessageSend" FunctionName="onMessageSendHandler" SendMode="PromptUser" />
+              </LaunchEvents>
+              <SourceLocation resid="Commands.Url" />
             </ExtensionPoint>
           </DesktopFormFactor>
         </Host>
